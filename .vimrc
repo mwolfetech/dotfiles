@@ -1,3 +1,5 @@
+".vimrc  there are many like it, but this one is mine.
+
 "syntax highlighting always on
 syntax enable
 
