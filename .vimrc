@@ -1,101 +1,105 @@
-syntax enable
-set t_Co=256 
+" Include all plugins, in separate directories under .vim/bundle
+" Needed on some linux distros.
+" see http://www.adamlowe.me/2009/12/vim-destroys-all-other-rails-editors.html
+filetype off
+call pathogen#helptags()
+call pathogen#runtime_append_all_bundles()
 
-"turn off arrow keys, for learning purposes
-"noremap  <Up> ""
-"noremap! <Up> <Esc>
-"noremap  <Down> ""
-"noremap! <Down> <Esc>
-"noremap  <Left> ""
-"noremap! <Left> <Esc>
-"noremap  <Right> ""
-"noremap! <Right> <Esc>
+" large undo buffer?
+set ut=2000
+
+"I use a 256 color terminal
+set t_Co=256
+
+"Default ctags file under current directory
+set tags=./tags
+
+"Line numbering on
+set number
+
+"turn off arrow keys, they are a crutch
+noremap  <Up> ""
+noremap! <Up> <Esc>
+noremap  <Down> ""
+noremap! <Down> <Esc>
+noremap  <Left> ""
+noremap! <Left> <Esc>
+noremap  <Right> ""
+noremap! <Right> <Esc>
+
+" I like comma as my default leader key
 let mapleader = ","
-map <Leader>t :FuzzyFinderTextMate<CR>
+
+" Useful diff commands, may not need now that I use fugitive
 map <Leader>sd :new<CR>:read !svn diff<CR>:set syntax=diff buftype=nofile<CR>gg
 map <Leader>gd :new<CR>:read !git diff<CR>:set syntax=diff buftype=nofile<CR>gg
 
-map <F4> :cn<CR>
-map <F3> :cp<CR>
-colorscheme herald 
+" Remove menu bar in gvim
+set guioptions-=m
 
-"fix omni completion menu
-highlight Pmenu ctermbg=238 ctermfg=255 gui=bold
+" Remove toolbar in gvim
+set guioptions-=T
 
-" Ruby
-au BufNewFile,BufRead *.rb,*.rbw,*.gem,*.gemspec set filetype=ruby
+" Color syntax highlighting on
+syntax on
 
-" Ruby on Rails
-au BufNewFile,BufRead *.builder,*.rxml,*.rjs set filetype=ruby
-
-" Rakefile
-au BufNewFile,BufRead [rR]akefile,*.rake set filetype=ruby
-
-" Rantfile
-au BufNewFile,BufRead [rR]antfile,*.rant set filetype=ruby
-
-" IRB config
-au BufNewFile,BufRead .irbrc,irbrc set filetype=ruby
-
-" Rackup
-au BufNewFile,BufRead *.ru set filetype=ruby
-
-" Capistrano
-au BufNewFile,BufRead Capfile set filetype=ruby
-
-" Bundler
-au BufNewFile,BufRead Gemfile set filetype=ruby
-
-" eRuby
-au BufNewFile,BufRead *.erb,*.rhtml set filetype=eruby
-
-au BufRead,BufNewFile *_spec.rb set filetype=rspec
-
-" Thorfile
-au BufNewFile,BufRead [tT]horfile,*.thor set filetype=ruby
-
+" Turn indent handling on
 filetype plugin indent on
 
-:set expandtab
-:set tabstop=2
-:set shiftwidth=2
+" Tab handling
+set tabstop=2
+set smarttab
+set shiftwidth=2
+set autoindent
+set expandtab
 
-" Removes trailing spaces
-function TrimWhiteSpace()
-  %s/\s*$//
-  ''
-  :endfunction
+" Light colored backgrounds are supposed to be more ergonomic
+" I use terminals that support 256 colors, so this color scheme works with both
+" vim and gvim
 
-  set list listchars=trail:.,extends:>
-  autocmd FileWritePre *.rb :call TrimWhiteSpace()
-  autocmd FileAppendPre *.rb :call TrimWhiteSpace()
-  autocmd FilterWritePre *.rb :call TrimWhiteSpace()
-  autocmd BufWritePre *.rb :call TrimWhiteSpace()
-  autocmd FileWritePre *.json :call TrimWhiteSpace()
-  autocmd FileAppendPre *.json :call TrimWhiteSpace()
-  autocmd FilterWritePre *.json :call TrimWhiteSpace()
-  autocmd BufWritePre *.json :call TrimWhiteSpace()
-  autocmd FileWritePre *.haml :call TrimWhiteSpace()
-  autocmd FileAppendPre *.haml :call TrimWhiteSpace()
-  autocmd FilterWritePre *.haml :call TrimWhiteSpace()
-  autocmd BufWritePre *.haml :call TrimWhiteSpace()
-  autocmd FileWritePre *.sass :call TrimWhiteSpace()
-  autocmd FileAppendPre *.sass :call TrimWhiteSpace()
-  autocmd FilterWritePre *.sass :call TrimWhiteSpace()
-  autocmd BufWritePre *.sass :call TrimWhiteSpace()
-  autocmd FileWritePre *.erb :call TrimWhiteSpace()
-  autocmd FileAppendPre *.erb :call TrimWhiteSpace()
-  autocmd FilterWritePre *.erb :call TrimWhiteSpace()
-  autocmd BufWritePre *.erb :call TrimWhiteSpace()
-  autocmd FileWritePre *.js :call TrimWhiteSpace()
-  autocmd FileAppendPre *.js :call TrimWhiteSpace()
-  autocmd FilterWritePre *.js :call TrimWhiteSpace()
-  autocmd BufWritePre *.js :call TrimWhiteSpace()
-  autocmd FileWritePre *.css :call TrimWhiteSpace()
-  autocmd FileAppendPre *.css :call TrimWhiteSpace()
-  autocmd FilterWritePre *.css :call TrimWhiteSpace()
-  autocmd BufWritePre *.css :call TrimWhiteSpace()
-  autocmd FileWritePre *.scss :call TrimWhiteSpace()
-  autocmd FileAppendPre *.scss :call TrimWhiteSpace()
-  autocmd FilterWritePre *.scss :call TrimWhiteSpace()
+colorscheme mayansmoke
+
+"required for Lusty explorer plugin
+:set hidden
+
+"for ack plugin
+let g:ackprg="ack-grep -H --nocolor --nogroup --column"
+
+
+" trim trailing whitespace on any write
+autocmd! BufWrite * mark ' | silent! %s/\s\+$// | norm ''
+
+"better status line
+:set laststatus=2
+
+if has("statusline")
+  set statusline=
+  set statusline+=%<\                       " cut at start
+  set statusline+=%2*[%n%H%M%R%W]%*\        " buffer number, and flags
+  set statusline+=%-40f\                    " relative path
+  set statusline+=%=                        " seperate between right- and left-aligned
+  set statusline+=%1*%y%*%*\                " file type
+  set statusline+=%10((%l/%L)%)\            " line and column
+  set statusline+=%P                        " percentage of file
+  set statusline+=%#warningmsg#
+  set statusline+=%{SyntasticStatuslineFlag()}
+  set statusline+=%*
+  set statusline+=%{fugitive#statusline()}
+endif
+
+" nice ruby / javascript compatible colorscheme
+" colorscheme herald
+
+" fix omni completion menu colors for herald
+" highlight Pmenu ctermbg=238 ctermfg=255 guifg=#ffffff guibg=#0000aa gui=bold
+
+" fix showmarks colors
+
+" highlight ShowMarksHLl ctermfg=darkblue ctermbg=black guifg=#00008B guibg=#000000
+" highlight ShowMarksHLu ctermfg=green    ctermbg=black guifg=#00FF00 guibg=#000000
+" highlight ShowMarksHLo ctermfg=yellow   ctermbg=black guifg=#00FFFF guibg=#000000
+" highlight ShowMarksHLm ctermfg=red      ctermbg=black guifg=#FF0000 guibg=#000000
+
+" marks that showmarks should show
+" let g:showmarks_include="a-zA-Z\"^'`(){}."
 
