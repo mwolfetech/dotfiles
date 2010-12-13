@@ -1,9 +1,9 @@
 xterm*faceName: Inconsolata:pixelsize=16
-URxvt*font: xft:Inconsolata:pixelsize=16
+URxvt*font: xft:Inconsolata:pixelsize=14
 URxvt*scrollstyle: plain
-URxvt*scrollBar: false 
+URxvt*scrollBar: false
 URxvt*transparent:true
-URxvt*shading:10
+URxvt*shading:12
 Xft.dpi: 96
 Xft.antialias: true
 Xft.rgba: rgb
