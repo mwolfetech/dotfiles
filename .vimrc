@@ -5,8 +5,8 @@ set nocompatible
 " Needed on some linux distros.
 " see http://www.adamlowe.me/2009/12/vim-destroys-all-other-rails-editors.html
 filetype off
-call pathogen#helptags()
 call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
 filetype on
 
 filetype indent plugin on
@@ -18,8 +18,8 @@ set ut=2000
 set t_Co=256
 
 "Default ctags file under current directory
-set tags=./tags
-
+"set tags=./tags
+let g:Tlist_Ctags_Cmd = "/home/mwolfe/bin/javascripttags"
 "Line numbering on
 set number
 
@@ -42,6 +42,10 @@ let g:CommandTSelectPrevMap='OA'
 " I like comma as my default leader key
 let mapleader = ","
 
+"easy rewrapping of arguments
+nnoremap <silent> <leader>s :call argumentrewrap#RewrapArguments()<CR>
+
+
 " Useful diff commands, may not need now that I use fugitive
 map <Leader>sd :new<CR>:read !svn diff<CR>:set syntax=diff buftype=nofile<CR>gg
 map <Leader>gd :new<CR>:read !git diff<CR>:set syntax=diff buftype=nofile<CR>gg
@@ -58,7 +62,7 @@ syntax on
 
 "syntastic options
 let g:syntastic_enable_signs=1
-let g:syntastic_auto_loc_list=1
+let g:syntastic_auto_loc_list=0
 "let g:syntastic_quiet_warnings=1
 " Turn indent handling on
 filetype plugin indent on
@@ -96,7 +100,7 @@ let g:ackprg="ack -H --nocolor --nogroup --column"
 autocmd! BufWrite * mark ' | silent! %s/\s\+$// | norm ''
 
 " trim whitespace at end of file on any write
-autocmd! BufWrite * mark ' | silent! g/^[\s\n]*\%$/d | norm ''
+autocmd BufWrite * mark ' | silent! g/^[\s\l\n]*\%$/d | norm ''
 
 
 "better status line
@@ -132,11 +136,19 @@ endif
 
 " marks that showmarks should show
 " let g:showmarks_include="a-zA-Z\"^'`(){}."
+"count 'lines of code'
+function! CountNonEmpty()
+   return len(filter(getline(1, line('$')), '!empty(v:val)'))
+endfunction
+
+
+
 
 "fold for javascript
 au FileType javascript call JavaScriptFold()
 au FileType javascript setl fen
 au FileType javascript setl nocindent
+
 
 function! JavaScriptFold()
     setl foldmethod=syntax
@@ -148,4 +160,3 @@ function! JavaScriptFold()
     endfunction
     setl foldtext=FoldText()
 endfunction
-
