@@ -23,6 +23,8 @@ let g:Tlist_Ctags_Cmd = "/home/mwolfe/bin/javascripttags"
 "Line numbering on
 set number
 
+"tagbar
+map <F2> :TagbarToggle<CR>
 
 "location and error list navigation
 map <F3> :cn<CR>
@@ -44,6 +46,10 @@ let mapleader = ","
 
 "easy rewrapping of arguments
 nnoremap <silent> <leader>s :call argumentrewrap#RewrapArguments()<CR>
+
+" reselect visual block after indent/outdent
+vnoremap < <gv
+vnoremap > >gv
 
 
 " Useful diff commands, may not need now that I use fugitive
@@ -81,7 +87,12 @@ set expandtab
 "colorscheme mayansmoke
 
 "good alternative dark colorscheme
-colorscheme herald
+"colorscheme herald
+set background=dark
+let g:solarized_termcolors=256
+"let g:colarized_termtrans=1
+colorscheme solarized
+"hi Normal ctermbg=none
 
 "hi NORMAL ctermbg=230
 
@@ -129,13 +140,13 @@ endif
 
 " fix showmarks colors
 
-" highlight ShowMarksHLl ctermfg=darkblue ctermbg=black guifg=#00008B guibg=#000000
-" highlight ShowMarksHLu ctermfg=green    ctermbg=black guifg=#00FF00 guibg=#000000
-" highlight ShowMarksHLo ctermfg=yellow   ctermbg=black guifg=#00FFFF guibg=#000000
-" highlight ShowMarksHLm ctermfg=red      ctermbg=black guifg=#FF0000 guibg=#000000
+highlight ShowMarksHLl ctermfg=darkblue ctermbg=black guifg=#00008B guibg=#000000
+highlight ShowMarksHLu ctermfg=green    ctermbg=black guifg=#00FF00 guibg=#000000
+highlight ShowMarksHLo ctermfg=yellow   ctermbg=black guifg=#00FFFF guibg=#000000
+highlight ShowMarksHLm ctermfg=red      ctermbg=black guifg=#FF0000 guibg=#000000
 
 " marks that showmarks should show
-" let g:showmarks_include="a-zA-Z\"^'`(){}."
+let g:showmarks_include="a-zA-Z\"^'`(){}."
 "count 'lines of code'
 function! CountNonEmpty()
    return len(filter(getline(1, line('$')), '!empty(v:val)'))
